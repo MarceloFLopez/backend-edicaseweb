@@ -1,4 +1,5 @@
-# Documentação da Aplicação (Back-End) 
+
+# Documentação da Aplicação (Back-End)
 
 ## Índice
 1. [Descrição](#descrição)
@@ -136,7 +137,7 @@ A API fornece endpoints para cadastro de usuários, login e logout, com autentic
 - **URL:** `/usuarios/:id`
 - **Descrição:** Obtém um usuário pelo ID.
 - **Resposta (sucesso):**
-  json
+  ```json
   {
     "id": 1,
     "nome": "Nome do Usuário",
@@ -144,7 +145,7 @@ A API fornece endpoints para cadastro de usuários, login e logout, com autentic
     "role": "usuario",
     "ativo": true
   }
-  
+  ```
 
 #### 4. **Atualizar Usuário**
 
@@ -152,7 +153,7 @@ A API fornece endpoints para cadastro de usuários, login e logout, com autentic
 - **URL:** `/usuarios/:id`
 - **Descrição:** Atualiza os dados de um usuário existente.
 - **Body:**
-  json
+  ```json
   {
     "nome": "Novo Nome",
     "email": "novo_email@dominio.com",
@@ -160,13 +161,13 @@ A API fornece endpoints para cadastro de usuários, login e logout, com autentic
     "role": "admin",
     "ativo": true
   }
-  
+  ```
 - **Resposta (sucesso):**
-  json
+  ```json
   {
     "message": "Usuário atualizado com sucesso!"
   }
-  
+  ```
 
 #### 5. **Logout**
 
@@ -174,15 +175,15 @@ A API fornece endpoints para cadastro de usuários, login e logout, com autentic
 - **URL:** `/logout`
 - **Descrição:** Realiza o logout do usuário, invalidando o token JWT.
 - **Resposta (sucesso):**
-  json
+  ```json
   {
     "message": "Logout realizado com sucesso!"
   }
-  
+  ```
 
 ### Exemplo de Requisição com Axios
 
-js
+```js
 import axios from 'axios';
 
 const login = async (email, senha) => {
@@ -194,7 +195,7 @@ const login = async (email, senha) => {
     console.error('Erro ao fazer login:', error.response.data);
   }
 };
-
+```
 
 ## Segurança
 
@@ -212,6 +213,7 @@ Além disso, **Bcrypt.js** é utilizado para criptografar as senhas dos usuário
 
 A estrutura do projeto é organizada da seguinte forma:
 
+```
 backend/
 ├── auth/                 # Lógica de autenticação (JWT, login/logout)
 ├── config/               # Configurações do banco de dados, etc.
@@ -224,35 +226,35 @@ backend/
 ├── app.js                # Configuração do servidor Express
 ├── package-lock.json     # Lock file para as dependências
 └── package.json          # Dependências e scripts do projeto
-
+```
 
 ## Como Subir o Projeto
 
 1. Clone o repositório:
 
-   bash
+   ```bash
    git clone <URL_DO_REPOSITORIO>
-   
+   ```
 
 2. Acesse o diretório do backend:
 
-   bash
+   ```bash
    cd backend
-   
+   ```
 
 3. Instale as dependências:
 
-   bash
+   ```bash
    npm install
-   
+   ```
 
 4. Configure as credenciais do banco de dados no arquivo `.env`.
 
 5. Rode o servidor:
 
-   bash
+   ```bash
    npm start
-   
+   ```
 
    O servidor estará rodando na porta `3000`.
 
@@ -262,7 +264,7 @@ backend/
 Agradeço ao **ChatGPT** por sua assistência no desenvolvimento da aplicação e na elaboração da documentação.
 
 ---
-
+```
 
 ### Como Usar:
 
@@ -270,10 +272,10 @@ Agradeço ao **ChatGPT** por sua assistência no desenvolvimento da aplicação 
 2. Copie e cole o conteúdo acima no arquivo.
 3. Adicione o arquivo ao seu repositório Git com os seguintes comandos:
 
-bash
+```bash
 git add README.md
 git commit -m "Adicionando documentação ao projeto"
 git push
-
+```
 
 Agora você terá sua documentação do back-end configurada no repositório Git!
