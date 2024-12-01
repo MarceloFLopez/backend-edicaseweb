@@ -1,5 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+
+// Configurar o CORS
+const corsOptions = {
+  origin: 'http://localhost:3001', // URL do frontend React
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+};
+
+// Usar o middleware CORS no Express
+app.use(cors(corsOptions));
+
 
 const rotaCliente = require('../minha-aplicacao-node/routes/clienteRouter');
 const rotaAutor = require('../minha-aplicacao-node/routes/autorRouter');
@@ -30,6 +42,11 @@ app.use('/api', rotaSaque);
 app.use('/api', usuarioRouter);
 app.use('/api', authRouter);
 
+
+// Resto do código da sua API
+app.get('/', (req, res) => {
+  res.send('API está funcionando!');
+});
 
 // Define a porta e inicia o servidor
 const PORT = 3000;

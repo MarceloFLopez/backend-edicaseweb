@@ -4,15 +4,13 @@ const usuarioController = require('../controllers/usuarioController');
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
+
 const router = express.Router();
 
 // routes/usuarioRouter.js
 
-router.post('/create-admin',authMiddleware.authenticateToken, roleMiddleware.authorizeRole('manager'), usuarioController.createAdminUser);
+router.post('/create-admin', usuarioController.createAdminUser);
 router.post('/create-user',authMiddleware.authenticateToken, roleMiddleware.authorizeRole('manager'), usuarioController.createUser);  // Rota para criar o usuário admin
-
-// Rota para login
-// router.post('/login', usuarioController.login);
 
 router.get('/usuarios', authMiddleware.authenticateToken, roleMiddleware.authorizeRole('manager'), usuarioController.getAll  );
 router.post('/usuarios', authMiddleware.authenticateToken, roleMiddleware.authorizeRole('manager'), usuarioController.create);

@@ -3,6 +3,10 @@ const connection = require('../config/database');
 const Usuario = require('../models/Usuario'); 
 const bcrypt = require('bcrypt');  // ou require('bcryptjs');
 const jwt = require('jsonwebtoken'); // Importa o pacote jsonwebtoken
+const util = require('util');
+const saltRounds = 10;
+
+const queryAsync = util.promisify(connection.query).bind(connection);
 
 module.exports = {
   // 1. Listar todos os usuários
@@ -62,12 +66,12 @@ module.exports = {
 
 // controllers/usuarioController.js
 createAdminUser: (req, res) => {
-  const query = 'INSERT INTO Usuario (nome, email, senha, role, ativo) VALUES (?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO Usuario (nome, email, senha, role) VALUES (?, ?, ?, ?)';
   const nome = 'Admin';
   const email = 'admin@admin.com';
   const senha = 'senhaAdmin';  // Senha a ser encriptada
   const role = 'manager';  // Role de admin
-  const ativo = true;  // Usuário ativo inicialmente
+   // Usuário ativo inicialmente
 
   // Gera o hash da senha antes de salvar no banco de dados
   bcrypt.hash(senha, 10, (err, hashedPassword) => {
@@ -109,17 +113,34 @@ createUser: (req, res) => {
 },
 
   // 3. Atualizar usuário
-  update: (req, res) => {
-    const { id } = req.params;
-    const { nome, email, senha, role, ativo } = req.body;
-    const query = 'UPDATE Usuario SET nome = ?, email = ?, senha = ?, role = ? , ativo = ? WHERE id = ?';
-    connection.query(query, [nome, email, senha, role, ativo, id], (err) => {
-      if (err) {
-        return res.status(500).json({ error: 'Erro ao atualizar usuário: ' + err.message });
+ 
+  
+  update: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { nome, email, senha, role, ativo } = req.body;
+  
+      // Validação dos campos
+      if (!nome || !email || !role || typeof ativo === 'undefined') {
+        return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser enviados.' });
       }
+  
+      // Hasheando a senha
+      const hashedPassword = await bcrypt.hash(senha, saltRounds);
+  
+      const query = 'UPDATE Usuario SET nome = ?, email = ?, senha = ?, role = ?, ativo = ? WHERE id = ?';
+      const result = await queryAsync(query, [nome, email, hashedPassword, role, ativo, id]);
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
+      }
+  
       res.json({ message: 'Usuário atualizado com sucesso!' });
-    });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao atualizar usuário: ' + err.message });
+    }
   },
+  
 
 // 4. Obter usuário por ID
 getById: (req, res) => {
